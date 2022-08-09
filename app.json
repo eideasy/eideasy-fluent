@@ -1,0 +1,33 @@
+{
+  "name": "eideasy-latitude59",
+  "env": {
+    "APP_ENV": {
+      "description": "specify your application environment",
+      "value": "production",
+      "required": true
+    },
+    "APP_KEY": {
+      "description": "Laravel APP_KEY, should be in the following format: base64:n0P9...",
+      "required": true
+    },
+    "APP_DEBUG": {
+      "value": "false",
+      "required": true
+    },
+    "APP_URL": {
+      "required": true
+    },
+    "EID_CLIENT_ID": {
+      "description": "Register at https://id.eideasy.com/admin to get the client id",
+      "required": true
+    },
+    "EID_SECRET": {
+      "description": "Register at https://id.eideasy.com/admin to get the api secret",
+      "required": true
+    },
+    "APP_NAME":  {
+      "value": "eID Easy at Latitude 59",
+      "required": false
+    }
+  }
+}
