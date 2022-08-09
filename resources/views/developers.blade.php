@@ -10,7 +10,7 @@
         <br>
         But don't take our word on it - see for yourself at
         <a
-                href="https://github.com/eideasy/simple-demo-php/blob/master/app/Http/Controllers/SignatureController.php"
+                href="https://github.com/eideasy/eideasy-fluent/blob/master/app/Http/Controllers/SignatureController.php"
                 target="_blank"
                 class="underline"
         >
