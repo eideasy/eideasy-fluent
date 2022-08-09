@@ -28,7 +28,7 @@
             button.addEventListener('click', (e) => {
               e.preventDefault();
               const actionType = button.dataset.actionType;
-              // TODO: 
+              // TODO:
               console.log(`Start actionType: ${actionType}, for docId: ${docId}`);
             });
           });
