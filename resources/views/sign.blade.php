@@ -20,7 +20,7 @@
             <div class="text-center pb-48 flex flex-wrap justify-center">
                 @foreach ($availableMethods as $method)
                     <div class="mx-2 my-2">
-                        @include('method-button', ['text' => $method, 'docId' => $docId])
+                        @include('method-button', ['text' => $method, 'method' => $method])
                     </div>
                 @endforeach
             </div>
