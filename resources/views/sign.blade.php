@@ -39,7 +39,7 @@
               e.preventDefault();
               const actionType = button.dataset.actionType;
               const country = document.getElementById('countrySelect').value;
-              eideasy.start(clientId, docId, actionType, country)
+              eideasy.start(clientId, docId, actionType, country);
             });
           });
 

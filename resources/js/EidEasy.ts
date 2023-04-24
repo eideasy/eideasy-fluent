@@ -1,3 +1,5 @@
+import windowOpen from "./windowOpen";
+
 class EidEasy {
   baseUrl: string;
 
@@ -12,13 +14,13 @@ class EidEasy {
   }
 
   start(clientId: string, docId: string, actionType: string, country: string) {
-    const iframeSrc = `${this.baseUrl}/single-method-signature?client_id=${clientId}&doc_id=${docId}&method=${actionType}&country=${country}`;
-    const overlay = this.createOverlay(iframeSrc);
-    document.body.appendChild(overlay);
-    overlay.addEventListener('click', (e) => {
-      e.preventDefault();
-      overlay.remove();
-    });
+    const url = `${this.baseUrl}/single-method-signature?client_id=${clientId}&doc_id=${docId}&method=${actionType}&country=${country}`;
+    windowOpen({
+      url,
+      onClosed: () => {
+        console.log('closed');
+      }
+    })
   }
 }
 
