@@ -5,6 +5,7 @@ services:
       context: ./
     volumes:
       - .:/var/www
+      - ./php.ini:/usr/local/etc/php/php.ini
     ports:
       - "8089:8080"
     environment:

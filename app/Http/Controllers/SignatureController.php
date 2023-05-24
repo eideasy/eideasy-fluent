@@ -57,7 +57,7 @@ class SignatureController extends Controller
     {
         $docId = $request->input('doc_id');
         $clientId = config('eideasy.client_id');
-        $apiUrl = config('eideasy.api_url');
+        $apiUrl = config('eideasy.web_api_url');
 
         $signingProcess = SigningProcess::where('doc_id', $docId)->first();
         return view('sign', [
