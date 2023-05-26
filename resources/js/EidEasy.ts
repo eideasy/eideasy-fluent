@@ -5,24 +5,30 @@ class EidEasy {
   openedWindow: Window;
   onSuccess: Function;
   onFail: Function;
+  onPopupWindowClosed: Function;
   messageHandler: EventListenerOrEventListenerObject;
 
-  constructor(
-    baseUrl: string = "https://id.eideasy.com",
-    onSuccess: Function = () => {},
-    onFail: Function = () => {},
-  ) {
+  constructor({
+    baseUrl = "https://id.eideasy.com",
+    onSuccess = () => {},
+    onFail = () => {},
+    onPopupWindowClosed = () => {},
+  }: {
+    baseUrl: string,
+    onSuccess: Function,
+    onFail: Function,
+    onPopupWindowClosed: Function,
+  }) {
     this.baseUrl = baseUrl;
     this.onSuccess = onSuccess;
     this.onFail = onFail;
+    this.onPopupWindowClosed = onPopupWindowClosed;
     this.messageHandler = this.handleMessage.bind(this);
 
     window.addEventListener('message', this.messageHandler);
   }
 
   handleMessage(event) {
-    console.log('message received');
-    console.log(event);
     const {data} = event;
 
     if (data.sender !== 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
@@ -43,27 +49,21 @@ class EidEasy {
     country
   }) {
     const _self = this;
-    const url = `${this.baseUrl}/single-method-signature?client_id=${clientId}&doc_id=${docId}&method=${actionType}&country=${country}`;
+    const url: string = `${this.baseUrl}/single-method-signature?client_id=${clientId}&doc_id=${docId}&method=${actionType}&country=${country}`;
     const windowOpenResult = windowOpen({
       url,
-      onClosed: () => {
-        console.log('closed');
-      }
+      onClosed: _self.onPopupWindowClosed,
     });
 
-    this.openedWindow = windowOpenResult.window;
+    _self.openedWindow = windowOpenResult.window;
   }
 
   handleSuccess(result) {
-    console.log('handleSuccess in EidEasy.ts');
-    console.log(result);
     this.openedWindow.close();
     this.onSuccess(result);
   }
 
   handleFail(error) {
-    console.log('handleFail in EidEasy.ts');
-    console.log(error);
     this.onFail(error);
   }
 
