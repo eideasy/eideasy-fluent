@@ -1,1 +1,263 @@
-(()=>{"use strict";var o,e,t,n,i,s,c,d={939:(o,e,t)=>{var n=t(513),i=function(){function o(o){var e=o.baseUrl,t=void 0===e?"https://id.eideasy.com":e,n=o.onSuccess,i=void 0===n?function(){}:n,s=o.onFail,c=void 0===s?function(){}:s,d=o.onPopupWindowClosed,a=void 0===d?function(){}:d;this.baseUrl=t,this.onSuccess=i,this.onFail=c,this.onPopupWindowClosed=a,this.messageHandler=this.handleMessage.bind(this),window.addEventListener("message",this.messageHandler)}return o.prototype.handleMessage=function(o){var e=o.data;"EIDEASY_SINGLE_METHOD_SIGNATURE"===e.sender&&("SUCCESS"===e.type?this.handleSuccess(e.result):"FAIL"===e.type&&this.handleFail(e.error))},o.prototype.start=function(o){var e=o.clientId,t=o.docId,i=o.actionType,s=o.country,c="".concat(this.baseUrl,"/single-method-signature?client_id=").concat(e,"&doc_id=").concat(t,"&method=").concat(i,"&country=").concat(s),d=(0,n.default)({url:c,onClosed:this.onPopupWindowClosed});this.openedWindow=d.window},o.prototype.handleSuccess=function(o){this.openedWindow.close(),this.onSuccess(o)},o.prototype.handleFail=function(o){this.onFail(o)},o.prototype.destroy=function(){window.removeEventListener("message",this.messageHandler)},o}();e.Z=i},513:(o,e)=>{Object.defineProperty(e,"__esModule",{value:!0}),e.calculateChildPosition=void 0;var t=function(o){var e=o.parent,t=o.child;return{left:e.width/2-t.width/2+e.left,top:e.height/2-t.height/2+e.top}};e.calculateChildPosition=t;e.default=function(o){var e=o.url,n=o.onClosed,i={width:800,height:600},s=t({parent:{width:window.outerWidth,height:window.outerHeight,left:window.screenLeft,top:window.screenTop},child:i}),c=["toolbar=no","location=no","directories=no","status=no","menubar=no","scrollbars=no","resizable=no","copyhistory=no","width=".concat(i.width),"height=".concat(i.height),"left=".concat(s.left),"top=".concat(s.top)],d=window.open(e,"eID Easy",c.join(", ")),a=setInterval((function(){d.closed&&(clearInterval(a),n())}),500);return{window:d}}}},a={};function l(o){var e=a[o];if(void 0!==e)return e.exports;var t=a[o]={exports:{}};return d[o](t,t.exports,l),t.exports}c=l(939),o=window.signingConfig,e=o.docId,t=o.clientId,n=o.apiUrl,i=Array.from(document.querySelectorAll("[data-action-type]")),s=new c.Z({baseUrl:n,onSuccess:function(o){console.log("SUCCESS logged in sign.blade.php :"),console.log(o),alert("SUCCESS, SIGNATURE DONE")},onFail:function(o){console.log("ERROR logged in sign.blade.php :"),console.log(o)},onPopupWindowClosed:function(){console.log("POPUP WINDOW CLOSED logged in sign.blade.php :")}}),i.forEach((function(o){o.addEventListener("click",(function(n){n.preventDefault();var i=o.dataset.actionType,c=document.getElementById("countrySelect").value;s.start({clientId:t,docId:e,actionType:i,country:c})}))}))})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./resources/js/EidEasy.ts":
+/*!*********************************!*\
+  !*** ./resources/js/EidEasy.ts ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+
+var windowOpen_1 = __webpack_require__(/*! ./windowOpen */ "./resources/js/windowOpen.ts");
+
+var EidEasy =
+/** @class */
+function () {
+  function EidEasy(_a) {
+    var _b = _a.baseUrl,
+        baseUrl = _b === void 0 ? "https://id.eideasy.com" : _b,
+        _c = _a.onSuccess,
+        onSuccess = _c === void 0 ? function () {} : _c,
+        _d = _a.onFail,
+        onFail = _d === void 0 ? function () {} : _d,
+        _e = _a.onPopupWindowClosed,
+        onPopupWindowClosed = _e === void 0 ? function () {} : _e;
+    this.baseUrl = baseUrl;
+    this.onSuccess = onSuccess;
+    this.onFail = onFail;
+    this.onPopupWindowClosed = onPopupWindowClosed;
+    this.messageHandler = this.handleMessage.bind(this);
+    window.addEventListener('message', this.messageHandler);
+  }
+
+  EidEasy.prototype.handleMessage = function (event) {
+    var data = event.data;
+
+    if (data.sender !== 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
+      return;
+    }
+
+    if (data.type === 'SUCCESS') {
+      this.handleSuccess(data.result);
+    } else if (data.type === 'FAIL') {
+      this.handleFail(data.error);
+    }
+  };
+
+  EidEasy.prototype.start = function (_a) {
+    var clientId = _a.clientId,
+        docId = _a.docId,
+        actionType = _a.actionType,
+        country = _a.country;
+
+    var _self = this;
+
+    var url = "".concat(this.baseUrl, "/single-method-signature?client_id=").concat(clientId, "&doc_id=").concat(docId, "&method=").concat(actionType, "&country=").concat(country);
+    var windowOpenResult = (0, windowOpen_1["default"])({
+      url: url,
+      onClosed: _self.onPopupWindowClosed
+    });
+    _self.openedWindow = windowOpenResult.window;
+  };
+
+  EidEasy.prototype.handleSuccess = function (result) {
+    this.openedWindow.close();
+    this.onSuccess(result);
+  };
+
+  EidEasy.prototype.handleFail = function (error) {
+    this.onFail(error);
+  };
+
+  EidEasy.prototype.destroy = function () {
+    window.removeEventListener('message', this.messageHandler);
+  };
+
+  return EidEasy;
+}();
+
+exports["default"] = EidEasy;
+
+/***/ }),
+
+/***/ "./resources/js/windowOpen.ts":
+/*!************************************!*\
+  !*** ./resources/js/windowOpen.ts ***!
+  \************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.calculateChildPosition = void 0;
+
+var calculateChildPosition = function calculateChildPosition(_a) {
+  var parent = _a.parent,
+      child = _a.child; // center the child window relative to the parent window
+
+  return {
+    left: parent.width / 2 - child.width / 2 + parent.left,
+    top: parent.height / 2 - child.height / 2 + parent.top
+  };
+};
+
+exports.calculateChildPosition = calculateChildPosition;
+
+var windowOpen = function windowOpen(_a) {
+  var url = _a.url,
+      onClosed = _a.onClosed;
+  var child = {
+    width: 800,
+    height: 600
+  };
+  var childPosition = calculateChildPosition({
+    parent: {
+      width: window.outerWidth,
+      height: window.outerHeight,
+      left: window.screenLeft,
+      top: window.screenTop
+    },
+    child: child
+  });
+  var features = ['toolbar=no', 'location=no', 'directories=no', 'status=no', 'menubar=no', 'scrollbars=no', 'resizable=no', 'copyhistory=no', "width=".concat(child.width), "height=".concat(child.height), "left=".concat(childPosition.left), "top=".concat(childPosition.top)];
+  var newWindow = window.open(url, 'eID Easy', features.join(', '));
+  var timer = setInterval(function () {
+    if (newWindow.closed) {
+      clearInterval(timer);
+      onClosed();
+    }
+  }, 500);
+  return {
+    window: newWindow
+  };
+};
+
+exports["default"] = windowOpen;
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+/*!******************************!*\
+  !*** ./resources/js/sign.js ***!
+  \******************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EidEasy__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EidEasy */ "./resources/js/EidEasy.ts");
+
+
+var renderResult = function renderResult(container, content) {
+  container.innerHTML = "<div>".concat(content.message, "</div>");
+  var subContent = null;
+
+  if (content.error) {
+    subContent = content.error.message;
+  } else if (content.response) {
+    subContent = content.response;
+  }
+
+  var subContentHtml = "<div><pre>".concat(JSON.stringify(subContent, null, 2), "</pre></div>");
+  container.insertAdjacentHTML('beforeend', subContentHtml);
+  container.classList.remove('hidden');
+};
+
+var clearRenderedResult = function clearRenderedResult(container) {
+  container.classList.add('hidden');
+};
+
+(function () {
+  var _window$signingConfig = window.signingConfig,
+      docId = _window$signingConfig.docId,
+      clientId = _window$signingConfig.clientId,
+      apiUrl = _window$signingConfig.apiUrl;
+  var buttons = Array.from(document.querySelectorAll('[data-action-type]'));
+  var resultContainer = document.getElementById('js-result-container');
+  console.log(resultContainer);
+  var eideasy = new _EidEasy__WEBPACK_IMPORTED_MODULE_0__["default"]({
+    baseUrl: apiUrl,
+    onSuccess: function onSuccess(response) {
+      console.log('SUCCESS logged in sign.blade.php :');
+      console.log(response);
+      renderResult(resultContainer, {
+        message: 'SUCCESS',
+        response: response
+      });
+    },
+    onFail: function onFail(error) {
+      console.log('ERROR logged in sign.blade.php :');
+      console.log(error);
+      renderResult(resultContainer, {
+        message: 'FAIL',
+        error: error
+      });
+    },
+    onPopupWindowClosed: function onPopupWindowClosed() {
+      console.log('POPUP WINDOW CLOSED logged in sign.blade.php');
+    }
+  });
+  buttons.forEach(function (button) {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      var actionType = button.dataset.actionType;
+      var country = document.getElementById('countrySelect').value;
+      clearRenderedResult(resultContainer);
+      eideasy.start({
+        clientId: clientId,
+        docId: docId,
+        actionType: actionType,
+        country: country
+      });
+    });
+  });
+})();
+})();
+
+/******/ })()
+;
