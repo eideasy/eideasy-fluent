@@ -12,6 +12,7 @@
 
 
         <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            <div id="js-result-container" class="pb-6 hidden"></div>
             <div class="mb-6 text-center">
                 <div class="form-floating"><select id="countrySelect" class="form-select">
                         <option value="EE">Estonia</option>
