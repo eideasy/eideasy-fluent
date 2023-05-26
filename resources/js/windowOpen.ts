@@ -1,7 +1,7 @@
 const calculateChildPosition = function calculateChildPosition({
-    parent,
-    child,
-  }) {
+                                                                 parent,
+                                                                 child,
+                                                               }) {
   // center the child window relative to the parent window
   return {
     left: (parent.width / 2) - (child.width / 2) + parent.left,
@@ -10,9 +10,12 @@ const calculateChildPosition = function calculateChildPosition({
 };
 
 const windowOpen = function windowOpen({
-    url,
-    onClosed,
-  }) {
+  url,
+  onClosed,
+}: {
+  url: string,
+  onClosed: Function,
+}) {
   const child = {
     width: 800,
     height: 600,
