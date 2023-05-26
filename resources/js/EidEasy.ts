@@ -5,6 +5,7 @@ class EidEasy {
   openedWindow: Window;
   onSuccess: Function;
   onFail: Function;
+  messageHandler: EventListenerOrEventListenerObject;
 
   constructor(
     baseUrl: string = "https://id.eideasy.com",
@@ -14,6 +15,25 @@ class EidEasy {
     this.baseUrl = baseUrl;
     this.onSuccess = onSuccess;
     this.onFail = onFail;
+    this.messageHandler = this.handleMessage.bind(this);
+
+    window.addEventListener('message', this.messageHandler);
+  }
+
+  handleMessage(event) {
+    console.log('message received');
+    console.log(event);
+    const {data} = event;
+
+    if (data.sender !== 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
+      return;
+    }
+
+    if (data.type === 'SUCCESS') {
+      this.handleSuccess(data.result);
+    } else if (data.type === 'FAIL') {
+      this.handleFail(data.error);
+    }
   }
 
   start({
@@ -32,22 +52,6 @@ class EidEasy {
     });
 
     this.openedWindow = windowOpenResult.window;
-
-    window.addEventListener('message', (event) => {
-      console.log('message received');
-      console.log(event);
-      const {data} = event;
-
-      if (data.sender !== 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
-        return;
-      }
-
-      if (data.type === 'SUCCESS') {
-        _self.handleSuccess(data.result);
-      } else if (data.type === 'FAIL') {
-        _self.handleFail(data.error);
-      }
-    });
   }
 
   handleSuccess(result) {
@@ -62,6 +66,10 @@ class EidEasy {
     console.log(error);
     this.onFail(error);
   }
+
+  destroy() {
+    window.removeEventListener('message', this.messageHandler);
+  }
 }
 
-window.EidEasy = EidEasy;
+export default EidEasy;

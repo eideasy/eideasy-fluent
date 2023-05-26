@@ -121,7 +121,24 @@ function () {
     this.baseUrl = baseUrl;
     this.onSuccess = onSuccess;
     this.onFail = onFail;
+    window.addEventListener('message', this.messageHandler.bind(this));
   }
+
+  EidEasy.prototype.messageHandler = function (event) {
+    console.log('message received');
+    console.log(event);
+    var data = event.data;
+
+    if (data.sender !== 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
+      return;
+    }
+
+    if (data.type === 'SUCCESS') {
+      this.handleSuccess(data.result);
+    } else if (data.type === 'FAIL') {
+      this.handleFail(data.error);
+    }
+  };
 
   EidEasy.prototype.start = function (_a) {
     var clientId = _a.clientId,
@@ -139,21 +156,6 @@ function () {
       }
     });
     this.openedWindow = windowOpenResult.window;
-    window.addEventListener('message', function (event) {
-      console.log('message received');
-      console.log(event);
-      var data = event.data;
-
-      if (data.sender !== 'EIDEASY_SINGLE_METHOD_SIGNATURE') {
-        return;
-      }
-
-      if (data.type === 'SUCCESS') {
-        _self.handleSuccess(data.result);
-      } else if (data.type === 'FAIL') {
-        _self.handleFail(data.error);
-      }
-    });
   };
 
   EidEasy.prototype.handleSuccess = function (result) {
@@ -167,6 +169,10 @@ function () {
     console.log('handleFail in EidEasy.ts');
     console.log(error);
     this.onFail(error);
+  };
+
+  EidEasy.prototype.destroy = function () {
+    window.removeEventListener('message', this.messageHandler);
   };
 
   return EidEasy;

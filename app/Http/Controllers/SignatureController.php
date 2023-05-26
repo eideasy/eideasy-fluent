@@ -59,12 +59,15 @@ class SignatureController extends Controller
         $clientId = config('eideasy.client_id');
         $apiUrl = config('eideasy.web_api_url');
 
+        $signingConfig = compact('docId', 'clientId', 'apiUrl');
+
         $signingProcess = SigningProcess::where('doc_id', $docId)->first();
         return view('sign', [
             'clientId' => $clientId,
             'docId' => $docId,
             'apiUrl' => $apiUrl,
-            'availableMethods' => $signingProcess->available_methods
+            'availableMethods' => $signingProcess->available_methods,
+            'signingConfig' => $signingConfig,
         ]);
     }
 }

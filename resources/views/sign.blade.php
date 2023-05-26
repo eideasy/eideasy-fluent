@@ -273,40 +273,6 @@
             </div>
         </div>
 
-        <script src="{{ mix('js/EidEasy.js') }}"></script>
-        <script>
-          const docId = {!! json_encode($docId) !!};
-          const clientId = {!! json_encode($clientId) !!};
-          const apiUrl = {!! json_encode($apiUrl) !!};
-          const buttons = Array.from(document.querySelectorAll('[data-action-type]'));
-          const eideasy = new window.EidEasy(
-            apiUrl,
-            (response) => {
-              console.log('SUCCESS logged in sign.blade.php :')
-              console.log(response);
-              alert('SUCCESS, SIGNATURE DONE');
-            },
-            (error) => {
-              console.log('ERROR logged in sign.blade.php :')
-              console.log(error);
-            },
-          );
-
-          buttons.forEach((button) => {
-            button.addEventListener('click', (e) => {
-              e.preventDefault();
-              const actionType = button.dataset.actionType;
-              const country = document.getElementById('countrySelect').value;
-              eideasy.start({
-                clientId,
-                docId,
-                actionType,
-                country,
-              });
-            });
-          });
-
-        </script>
-
+        @include('sign-scripts')
     </main>
 @endsection
