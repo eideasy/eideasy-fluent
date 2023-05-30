@@ -64,9 +64,13 @@ class EidEasy {
   }
 
   handleFail(error, isRetryAllowed) {
-    if (!isRetryAllowed) {
-      this.openedWindow.close();
+
+    // End user can still retry the actions in the popup window, so we don't want to close it yet.
+    if (isRetryAllowed) {
+      return;
     }
+
+    this.openedWindow.close();
     this.onFail(error);
   }
 
