@@ -38,7 +38,7 @@ class EidEasy {
     if (data.type === 'SUCCESS') {
       this.handleSuccess(data.result);
     } else if (data.type === 'FAIL') {
-      this.handleFail(data.error);
+      this.handleFail(data.error, data.isRetryAllowed);
     }
   }
 
@@ -63,7 +63,10 @@ class EidEasy {
     this.onSuccess(result);
   }
 
-  handleFail(error) {
+  handleFail(error, isRetryAllowed) {
+    if (!isRetryAllowed) {
+      this.openedWindow.close();
+    }
     this.onFail(error);
   }
 
