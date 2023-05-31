@@ -1,4 +1,5 @@
 import windowOpen from "./windowOpen";
+import axios from 'axios';
 
 class EidEasy {
   baseUrl: string;
@@ -7,6 +8,8 @@ class EidEasy {
   onFail: Function;
   onPopupWindowClosed: Function;
   messageHandler: EventListenerOrEventListenerObject;
+  successCalled = false;
+  pollTimeout = null;
 
   constructor({
     baseUrl = "https://id.eideasy.com",
@@ -48,6 +51,7 @@ class EidEasy {
     actionType,
     country
   }) {
+    this.successCalled = false;
     const _self = this;
     const url: string = `${this.baseUrl}/single-method-signature?client_id=${clientId}&doc_id=${docId}&method=${actionType}&country=${country}`;
     const windowOpenResult = windowOpen({
@@ -55,11 +59,46 @@ class EidEasy {
       onClosed: _self.onPopupWindowClosed,
     });
 
-    _self.openedWindow = windowOpenResult.window;
+    this.openedWindow = windowOpenResult.window;
+    if (this.pollTimeout) {
+      window.clearTimeout(this.pollTimeout);
+      this.pollTimeout = null;
+    }
+    this.poll(docId, clientId);
+  }
+
+  poll(docId, clientId) {
+    console.log('Start polling');
+    const _self = this;
+    this.pollTimeout = window.setTimeout(() => {
+      axios.post(`${this.baseUrl}/api/signatures/signing-session/status`, {
+        doc_id: docId,
+        client_id: clientId,
+      }).then(function (response) {
+          if (response.data && response.data.signing_session_status === 'SIGNED') {
+            _self.handleSuccess(response.data.result);
+            return;
+          }
+          _self.poll(docId, clientId);
+      }).catch(function (error) {
+          console.log(error);
+      });
+    }, 2000);
   }
 
   handleSuccess(result) {
-    this.openedWindow.close();
+    if (this.successCalled) {
+      console.log('Success already called');
+      return;
+    }
+
+    this.successCalled = true;
+    try {
+      this.openedWindow.close();
+    } catch (e) {
+      console.error(e);
+    }
+
     this.onSuccess(result);
   }
 
@@ -76,6 +115,8 @@ class EidEasy {
 
   destroy() {
     window.removeEventListener('message', this.messageHandler);
+    window.clearTimeout(this.pollTimeout);
+    this.pollTimeout = null;
   }
 }
 

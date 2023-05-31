@@ -47,6 +47,7 @@ const windowOpen = function windowOpen({
   ];
 
   const newWindow = window.open(url, 'eID Easy', features.join(', '));
+  console.log(url);
 
   const timer = setInterval(() => {
     if (newWindow.closed) {
