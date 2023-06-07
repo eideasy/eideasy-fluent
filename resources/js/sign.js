@@ -1,4 +1,5 @@
-import EidEasy from './EidEasy';
+// import Signature from '../../../../laragon/www/signature-js/dist/eideasy-signature.js';
+import Signature from '@eid-easy/signature-js';
 
 (function () {
 
@@ -30,7 +31,7 @@ import EidEasy from './EidEasy';
   const {docId, clientId, apiUrl} = window.signingConfig;
   const buttons = Array.from(document.querySelectorAll('[data-action-type]'));
 
-  const eideasy = new EidEasy({
+  const signature = new Signature({
     baseUrl: apiUrl,
     onSuccess: (response) => {
       console.log('SUCCESS logged in sign.blade.php :')
@@ -39,7 +40,6 @@ import EidEasy from './EidEasy';
         state.messages.push({
           timestamp: new Date().toISOString(),
           message: 'SUCCESS',
-          response,
         });
         return state;
       });
@@ -67,7 +67,7 @@ import EidEasy from './EidEasy';
       const actionType = button.dataset.actionType;
       const country = document.getElementById('countrySelect').value;
 
-      eideasy.start({
+      signature.start({
         clientId,
         docId,
         actionType,
